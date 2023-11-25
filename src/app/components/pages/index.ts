@@ -1,0 +1,9 @@
+export { HomePage } from './HomePage';
+export { UserPage } from './UserPage';
+export { ErrorPage } from './ErrorPage';
+export { SignInPage } from './SignInPage';
+export { SignUpPage } from './SignUpPage';
+export { ProductPage } from './ProductPage';
+export { NotFoundPage } from './NotFoundPage';
+export { ShoppingBasketPage } from './ShoppingBasketPage';
+export { FavoriteProductsPage } from './FavoriteProductsPage';
