@@ -26,7 +26,7 @@ export const createProductScheme = object({
 	description: string().required(),
 });
 
-export const TEST_ID_MAP = {
+export const CREATE_PRODUCT_FORM_TEST_ID_MAP = {
 	form: 'form',
 	nameField: 'nameField',
 	priceField: 'priceField',

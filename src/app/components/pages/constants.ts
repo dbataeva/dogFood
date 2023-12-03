@@ -1,7 +1,7 @@
 export const MIN_PASSWORD_LENGTH = 6;
 export const MAX_PASSWORD_LENGTH = 24;
 
-export const TEST_ID_MAP = {
+export const PAGES_TEST_ID_MAP = {
 	favoritePage: 'favoritePage',
 	homePage: 'homePage',
 	notFoundPage: 'notFoundPage',

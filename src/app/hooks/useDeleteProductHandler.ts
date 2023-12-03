@@ -1,31 +1,40 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useContext, useEffect } from 'react';
 import {
-	fetchUserInfo,
 	selectUser,
+	setUserData,
 	useAppDispatch,
 	useAppSelector,
 } from '../store';
-import { useDeleteProductMutation } from '../../api';
+import { useDeleteProductMutation, useGetUserInfoQuery } from '../../api';
+import { PageContext } from '../providers';
 
 type UseDeleteProductHandlerType = {
-	clickDeleteProductHandler: (id: string) => () => Promise<any>;
 	currentUserId?: string;
+	clickDeleteProductHandler: (
+		id: string,
+		pageNumber?: number
+	) => () => Promise<any>;
 };
 
 export const useDeleteProductHandler = (): UseDeleteProductHandlerType => {
 	const [deleteProductFn] = useDeleteProductMutation();
 	const { currentUser } = useAppSelector(selectUser);
+	const { searchByValue } = useContext(PageContext);
+	const { data: userData, isSuccess } = useGetUserInfoQuery(undefined, {
+		skip: !!currentUser,
+	});
 	const dispatch = useAppDispatch();
 
 	useEffect(() => {
-		!currentUser && dispatch(fetchUserInfo());
-	}, []);
+		isSuccess && dispatch(setUserData(userData));
+	}, [userData, dispatch, isSuccess]);
 
 	const clickDeleteProductHandler = useCallback(
-		(id: string) => {
-			return () => deleteProductFn(id);
+		(id: string, pageNumber?: number) => {
+			return () =>
+				deleteProductFn({ productId: id, pageNumber, searchByValue });
 		},
-		[deleteProductFn]
+		[deleteProductFn, searchByValue]
 	);
 
 	return {

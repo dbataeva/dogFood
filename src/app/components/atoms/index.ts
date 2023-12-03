@@ -4,7 +4,6 @@ export { Search } from './Search';
 export { Contacts } from './Contacts';
 export { Feedback } from './Feedback';
 export { NotFound } from './NotFound';
-export { UserCard } from './UserCard';
 export { ErrorComponent } from './Error';
 export { MobileMenu } from './MobileMenu';
 export { ProductImage } from './ProductImage';

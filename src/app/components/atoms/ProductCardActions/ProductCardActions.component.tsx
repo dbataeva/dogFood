@@ -10,29 +10,37 @@ import {
 } from '@mui/icons-material';
 
 import { getIsLiked } from '../../../utils';
-import { TEXT_MAP } from './textMap';
+import {
+	PRODUCT_CARD_ACTIONS_TEXT_MAP,
+	PRODUCT_CARD_ACTIONS_TEST_ID_MAP,
+} from './constants';
 import { useClickFavoriteHandler, useManageBasket } from '../../../hooks';
 import {
-	fetchUserInfo,
 	selectUser,
+	setUserData,
 	useAppDispatch,
 	useAppSelector,
 } from '../../../store';
 import { Product } from '../../../../types';
+import { useGetUserInfoQuery } from '../../../../api';
 
 type ProductCardActions = Pick<Product, '_id' | 'likes' | 'stock'> & {
 	priceWithDiscount: Product['price'];
+	pageNumber?: number;
 };
 
 export const ProductCardActions: FC<ProductCardActions> = memo(
-	({ likes, _id, priceWithDiscount, stock }) => {
+	({ likes, _id, priceWithDiscount, stock, pageNumber = 0 }) => {
 		const { currentUser } = useAppSelector(selectUser);
+		const { data, isSuccess } = useGetUserInfoQuery(undefined, {
+			skip: !!currentUser,
+		});
 
 		const dispatch = useAppDispatch();
 
 		useEffect(() => {
-			!currentUser && dispatch(fetchUserInfo());
-		}, []);
+			isSuccess && dispatch(setUserData(data));
+		}, [data, dispatch, isSuccess]);
 
 		const isLiked = useMemo(
 			() => getIsLiked(likes, currentUser?._id),
@@ -41,6 +49,7 @@ export const ProductCardActions: FC<ProductCardActions> = memo(
 
 		const clickFavoriteHandler = useClickFavoriteHandler({
 			likes,
+			pageNumber,
 			productId: _id,
 			currentUserId: currentUser?._id,
 		});
@@ -83,13 +92,22 @@ export const ProductCardActions: FC<ProductCardActions> = memo(
 						disabled={!stock}
 						variant='contained'
 						onClick={clickAddProductToBasketHandler}>
-						{TEXT_MAP.addToBasket}
+						{PRODUCT_CARD_ACTIONS_TEXT_MAP.addToBasket}
 					</Button>
 				)}
 				<IconButton
 					aria-label='add to favorites'
-					onClick={clickFavoriteHandler}>
-					{isLiked ? <Favorite /> : <FavoriteBorder />}
+					onClick={clickFavoriteHandler}
+					data-testid={PRODUCT_CARD_ACTIONS_TEST_ID_MAP.likeButton}>
+					{isLiked ? (
+						<Favorite
+							data-testid={PRODUCT_CARD_ACTIONS_TEST_ID_MAP.likedIcon}
+						/>
+					) : (
+						<FavoriteBorder
+							data-testid={PRODUCT_CARD_ACTIONS_TEST_ID_MAP.nonLikedIcon}
+						/>
+					)}
 				</IconButton>
 			</CardActions>
 		);

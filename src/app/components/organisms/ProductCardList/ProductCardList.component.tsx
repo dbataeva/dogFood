@@ -5,7 +5,7 @@ import { Badge, IconButton } from '@mui/material';
 import { DeleteForeverOutlined } from '@mui/icons-material';
 import { useLocation } from 'react-router-dom';
 
-import { TEXT_MAP } from './textMap';
+import { PRODUCT_CARD_LIST_TEST_ID_MAP, TEXT_MAP } from './constants';
 import { withQuery } from '../../../HOCs';
 import { Product, TestIdType } from '../../../../types';
 import { ErrorResponse } from '../../../../api';
@@ -57,7 +57,13 @@ export const ProductCardList: FC<ProductCardListProps> = memo(
 					}}>
 					{!!cardsArr.length &&
 						cardsArr.map((item) => {
-							const onClickHandler = clickDeleteProductHandler(item._id);
+							const pageNumber = Math.floor(
+								cardsArr.findIndex((card) => card._id === item._id) / 12
+							);
+							const onClickHandler = clickDeleteProductHandler(
+								item._id,
+								pageNumber
+							);
 
 							return (
 								<Badge
@@ -66,8 +72,11 @@ export const ProductCardList: FC<ProductCardListProps> = memo(
 									badgeContent={
 										item.author._id === currentUserId ? (
 											<IconButton
+												onClick={onClickHandler}
 												aria-label='delete product'
-												onClick={onClickHandler}>
+												data-testid={
+													PRODUCT_CARD_LIST_TEST_ID_MAP.deleteProductButton
+												}>
 												<DeleteForeverOutlined />
 											</IconButton>
 										) : undefined
@@ -78,6 +87,7 @@ export const ProductCardList: FC<ProductCardListProps> = memo(
 										key={item._id}
 										cardWidth={236}
 										testId={testId}
+										pageNumber={pageNumber}
 										navTo={
 											location.pathname === '/'
 												? `products/${item._id}`

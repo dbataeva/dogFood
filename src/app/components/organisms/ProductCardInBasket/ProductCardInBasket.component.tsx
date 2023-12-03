@@ -8,9 +8,9 @@ import { TEXT_MAP } from './textMap';
 
 export const ProductCardInBasket: FC<Pick<ProductInBasket, '_id'>> = memo(
 	({ _id }) => {
+		const [isErrorVisible, setIsErrorVisible] = useState(true);
 		const { isLoading, error, isError, data, refetch } =
 			useGetProductByIdQuery(_id);
-		const [isErrorVisible, setIsErrorVisible] = useState(true);
 
 		return (
 			<ProductCardWithQuery

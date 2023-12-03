@@ -4,12 +4,12 @@ import { useMemo, useEffect } from 'react';
 
 import {
 	selectUser,
+	setUserData,
 	useAppDispatch,
 	useAppSelector,
-	fetchUserInfo,
 } from '../store';
 import { Product } from '../../types';
-import { useGetProductsQuery } from '../../api';
+import { useGetProductsQuery, useGetUserInfoQuery } from '../../api';
 
 type UseGetFavoriteProductsType = {
 	isError: boolean;
@@ -23,11 +23,14 @@ type UseGetFavoriteProductsType = {
 export const useGetFavoriteProducts = (): UseGetFavoriteProductsType => {
 	const dispatch = useAppDispatch();
 	const { currentUser } = useAppSelector(selectUser);
+	const { data: userData, isSuccess } = useGetUserInfoQuery(undefined, {
+		skip: !!currentUser,
+	});
 	const { data, error, isError, refetch, isLoading } = useGetProductsQuery();
 
 	useEffect(() => {
-		!currentUser && dispatch(fetchUserInfo());
-	}, []);
+		isSuccess && dispatch(setUserData(userData));
+	}, [userData, dispatch, isSuccess]);
 
 	const favoriteProducts = useMemo(
 		() =>

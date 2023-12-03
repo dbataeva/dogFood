@@ -2,7 +2,7 @@ import { screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { userEvent } from '@testing-library/user-event';
 
-import { TEST_ID_MAP } from './constants';
+import { PAGES_TEST_ID_MAP } from './constants';
 import { testProvidersFn } from '../../testProviders';
 import * as productsApi from '../../../api/productsApi';
 import * as getFavoriteProducts from '../../hooks/useGetFavoriteProducts';
@@ -39,40 +39,48 @@ const mockedProduct = {
 describe('Роутер', () => {
 	it('должен рендерить страницу singIn для неавторизованного пользователя', () => {
 		testProvidersFn();
-		expect(screen.getByTestId(TEST_ID_MAP.signInPage)).toBeInTheDocument();
+		expect(
+			screen.getByTestId(PAGES_TEST_ID_MAP.signInPage)
+		).toBeInTheDocument();
 	});
 
 	it('должен перенаправлять на страницу singUp при клике на предложение авторизоваться на странице входа', () => {
 		testProvidersFn();
 
-		const navToSingUp = screen.getByTestId(TEST_ID_MAP.navToSingUp);
+		const navToSingUp = screen.getByTestId(PAGES_TEST_ID_MAP.navToSingUp);
 
 		userEvent.click(navToSingUp);
 
 		waitFor(() =>
-			expect(screen.getByTestId(TEST_ID_MAP.signUpPage)).toBeInTheDocument()
+			expect(
+				screen.getByTestId(PAGES_TEST_ID_MAP.signUpPage)
+			).toBeInTheDocument()
 		);
 	});
 
 	it('должен перенаправлять на страницу singIn при клике на предложение войти на странице входа', () => {
 		testProvidersFn('/signUp');
 
-		const navToSingIn = screen.getByTestId(TEST_ID_MAP.navToSingIn);
+		const navToSingIn = screen.getByTestId(PAGES_TEST_ID_MAP.navToSingIn);
 
 		userEvent.click(navToSingIn);
 
 		waitFor(() =>
-			expect(screen.getByTestId(TEST_ID_MAP.signInPage)).toBeInTheDocument()
+			expect(
+				screen.getByTestId(PAGES_TEST_ID_MAP.signInPage)
+			).toBeInTheDocument()
 		);
 	});
 
 	it('должен перенаправлять на страницу singIn после успешной авторизации', () => {
 		testProvidersFn('/signUp');
 
-		const groupTextField = screen.getByTestId(TEST_ID_MAP.groupTextField);
-		const emailTextField = screen.getByTestId(TEST_ID_MAP.emailTextField);
-		const passwordTextField = screen.getByTestId(TEST_ID_MAP.passwordTextField);
-		const submitButton = screen.getByTestId(TEST_ID_MAP.submitButton);
+		const groupTextField = screen.getByTestId(PAGES_TEST_ID_MAP.groupTextField);
+		const emailTextField = screen.getByTestId(PAGES_TEST_ID_MAP.emailTextField);
+		const passwordTextField = screen.getByTestId(
+			PAGES_TEST_ID_MAP.passwordTextField
+		);
+		const submitButton = screen.getByTestId(PAGES_TEST_ID_MAP.submitButton);
 
 		userEvent.type(groupTextField, 'sb-3');
 		userEvent.type(emailTextField, 'some_email@gmail.com');
@@ -80,39 +88,45 @@ describe('Роутер', () => {
 		userEvent.click(submitButton);
 
 		waitFor(() =>
-			expect(screen.getByTestId(TEST_ID_MAP.signInPage)).toBeInTheDocument()
+			expect(
+				screen.getByTestId(PAGES_TEST_ID_MAP.signInPage)
+			).toBeInTheDocument()
 		);
 	});
 
 	it('должен перенаправлять на главную страницу со страницы singIn после успешного входа', () => {
 		testProvidersFn();
 
-		const emailTextField = screen.getByTestId(TEST_ID_MAP.emailTextField);
-		const passwordTextField = screen.getByTestId(TEST_ID_MAP.passwordTextField);
-		const submitButton = screen.getByTestId(TEST_ID_MAP.submitButton);
+		const emailTextField = screen.getByTestId(PAGES_TEST_ID_MAP.emailTextField);
+		const passwordTextField = screen.getByTestId(
+			PAGES_TEST_ID_MAP.passwordTextField
+		);
+		const submitButton = screen.getByTestId(PAGES_TEST_ID_MAP.submitButton);
 
 		userEvent.type(emailTextField, 'some_email@gmail.com');
 		userEvent.type(passwordTextField, '12345678');
 		userEvent.click(submitButton);
 
 		waitFor(() =>
-			expect(screen.getByTestId(TEST_ID_MAP.homePage)).toBeInTheDocument()
+			expect(screen.getByTestId(PAGES_TEST_ID_MAP.homePage)).toBeInTheDocument()
 		);
 	});
 
 	it('должен перенаправлять на первоначальную страницу со страницы singIn после успешного входа', () => {
 		testProvidersFn('/users/me');
 
-		const emailTextField = screen.getByTestId(TEST_ID_MAP.emailTextField);
-		const passwordTextField = screen.getByTestId(TEST_ID_MAP.passwordTextField);
-		const submitButton = screen.getByTestId(TEST_ID_MAP.submitButton);
+		const emailTextField = screen.getByTestId(PAGES_TEST_ID_MAP.emailTextField);
+		const passwordTextField = screen.getByTestId(
+			PAGES_TEST_ID_MAP.passwordTextField
+		);
+		const submitButton = screen.getByTestId(PAGES_TEST_ID_MAP.submitButton);
 
 		userEvent.type(emailTextField, 'some_email@gmail.com');
 		userEvent.type(passwordTextField, '12345678');
 		userEvent.click(submitButton);
 
 		waitFor(() =>
-			expect(screen.getByTestId(TEST_ID_MAP.userPage)).toBeInTheDocument()
+			expect(screen.getByTestId(PAGES_TEST_ID_MAP.userPage)).toBeInTheDocument()
 		);
 	});
 
@@ -129,18 +143,24 @@ describe('Роутер', () => {
 
 		testProvidersFn('/', true);
 
-		const productMiniCard = screen.getByTestId(TEST_ID_MAP.productMiniCard);
+		const productMiniCard = screen.getByTestId(
+			PAGES_TEST_ID_MAP.productMiniCard
+		);
 
 		userEvent.click(productMiniCard);
 
 		waitFor(() =>
-			expect(screen.getByTestId(TEST_ID_MAP.productPage)).toBeInTheDocument()
+			expect(
+				screen.getByTestId(PAGES_TEST_ID_MAP.productPage)
+			).toBeInTheDocument()
 		);
 	});
 
 	it('должен рендерить страницу NotFound при переходе не несуществующий роут', () => {
 		testProvidersFn('/balbalbla', true);
-		expect(screen.getByTestId(TEST_ID_MAP.notFoundPage)).toBeInTheDocument();
+		expect(
+			screen.getByTestId(PAGES_TEST_ID_MAP.notFoundPage)
+		).toBeInTheDocument();
 	});
 
 	it('должен перенаправлять на страницу продукта со страницы избранных продуктов при клике на мини-карточку продука', () => {
@@ -155,12 +175,16 @@ describe('Роутер', () => {
 
 		testProvidersFn('/products/favorite', true);
 
-		const productMiniCard = screen.getByTestId(TEST_ID_MAP.productMiniCard);
+		const productMiniCard = screen.getByTestId(
+			PAGES_TEST_ID_MAP.productMiniCard
+		);
 
 		userEvent.click(productMiniCard);
 
 		waitFor(() =>
-			expect(screen.getByTestId(TEST_ID_MAP.productPage)).toBeInTheDocument()
+			expect(
+				screen.getByTestId(PAGES_TEST_ID_MAP.productPage)
+			).toBeInTheDocument()
 		);
 	});
 
@@ -184,15 +208,19 @@ describe('Роутер', () => {
 
 		testProvidersFn('/products/favorite', true);
 
-		const productMiniCard = screen.getByTestId(TEST_ID_MAP.productMiniCard);
+		const productMiniCard = screen.getByTestId(
+			PAGES_TEST_ID_MAP.productMiniCard
+		);
 
 		userEvent.click(productMiniCard);
 
 		waitFor(() => {
-			const goBackButton = screen.getByTestId(TEST_ID_MAP.goBackButton);
+			const goBackButton = screen.getByTestId(PAGES_TEST_ID_MAP.goBackButton);
 
 			userEvent.click(goBackButton);
-			expect(screen.getByTestId(TEST_ID_MAP.favoritePage)).toBeInTheDocument();
+			expect(
+				screen.getByTestId(PAGES_TEST_ID_MAP.favoritePage)
+			).toBeInTheDocument();
 		});
 	});
 
@@ -207,12 +235,12 @@ describe('Роутер', () => {
 
 		testProvidersFn('/products/456', true);
 
-		const goBackButton = screen.getByTestId(TEST_ID_MAP.goBackButton);
+		const goBackButton = screen.getByTestId(PAGES_TEST_ID_MAP.goBackButton);
 
 		userEvent.click(goBackButton);
 
 		waitFor(() =>
-			expect(screen.getByTestId(TEST_ID_MAP.userPage)).toBeInTheDocument()
+			expect(screen.getByTestId(PAGES_TEST_ID_MAP.userPage)).toBeInTheDocument()
 		);
 	});
 });

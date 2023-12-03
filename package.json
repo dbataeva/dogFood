@@ -31,6 +31,7 @@
 		"cross-env": "^7.0.3",
 		"css-loader": "^6.8.1",
 		"cssnano": "^6.0.1",
+		"cypress": "^13.6.0",
 		"cz-conventional-changelog": "^3.3.0",
 		"eslint": "^8.42.0",
 		"eslint-config-prettier": "^8.8.0",
@@ -68,14 +69,15 @@
 	},
 	"scripts": {
 		"build": "cross-env NODE_ENV=production webpack --config webpack/webpack.config.js --env env=prod",
+		"commit": "cz",
+		"cypress": "cypress open",
+		"format": "prettier --write \"./src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\" --ignore-path ./.prettierignore",
+		"lint": "eslint --fix \"./src/**/*.{js,jsx,ts,tsx,json}\"",
+		"prepare": "husky install",
 		"start": "webpack serve --config webpack/webpack.config.js --env env=dev",
 		"stylelint": "stylelint \"src/**/*.css\"",
 		"stylelint:fix": "stylelint \"src/**/*.css\" --fix",
-		"lint": "eslint --fix \"./src/**/*.{js,jsx,ts,tsx,json}\"",
-		"format": "prettier --write \"./src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\" --ignore-path ./.prettierignore",
-		"test": "jest",
-		"prepare": "husky install",
-		"commit": "cz"
+		"test": "jest"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.11.1",

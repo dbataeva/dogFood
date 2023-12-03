@@ -1,6 +1,6 @@
 export const MENU_ID = 'primary-search-account-menu';
 
-export const TEST_ID_MAP = {
+export const HEADER_ICON_BUTTONS_TEST_ID_MAP = {
 	favorite: 'favorite',
 	basket: 'basket',
 	profile: 'profile',

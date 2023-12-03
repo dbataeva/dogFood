@@ -1,3 +1,4 @@
+export type { FeedbackProps } from './atoms';
 export { Header, Footer } from './molecules';
 export {
 	HomePage,

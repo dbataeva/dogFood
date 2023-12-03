@@ -4,27 +4,22 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Container from '@mui/material/Container';
-import { memo, useState } from 'react';
+import { memo } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 
-import { TEXT_MAP } from './textMap';
-import { signInSchema } from './constants';
+import { signInSchema, SIGN_IN_PAGE_TEXT_MAP } from './constants';
 import {
 	ErrorResponse,
 	SignInFormType,
 	useSignInMutation,
 	LOCAL_STORAGE_TOKEN_KEY,
 } from '../../../../api';
-import {
-	EmailController,
-	Feedback,
-	FeedbackProps,
-	PasswordController,
-} from '../../atoms';
+import { EmailController, Feedback, PasswordController } from '../../atoms';
 import { setUserData, useAppDispatch } from '../../../store';
-import { TEST_ID_MAP } from '../constants';
+import { PAGES_TEST_ID_MAP } from '../constants';
+import { useFeedback } from '../../../hooks';
 
 export const SignInPage = memo(() => {
 	const {
@@ -39,10 +34,14 @@ export const SignInPage = memo(() => {
 		resolver: yupResolver(signInSchema),
 	});
 
-	const [feedbackVisibility, setFeedbackVisibility] = useState(false);
-	const [feedbackMessage, setFeedbackMessage] = useState('');
-	const [feedbackState, setFeedbackState] =
-		useState<FeedbackProps['state']>('success');
+	const {
+		feedbackVisibility,
+		setFeedbackVisibility,
+		feedbackMessage,
+		feedbackState,
+		showSuccessfulFeedback,
+		showFailureMessage,
+	} = useFeedback();
 
 	const [signInFn] = useSignInMutation();
 	const dispatch = useAppDispatch();
@@ -53,14 +52,11 @@ export const SignInPage = memo(() => {
 			const response = await signInFn(data).unwrap();
 
 			dispatch(setUserData(response.data));
-			setFeedbackVisibility(true);
-			setFeedbackMessage(TEXT_MAP.successSignIn);
+			showSuccessfulFeedback(SIGN_IN_PAGE_TEXT_MAP.successSignIn);
 			window.localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, response.token);
-			navigate(state.destination || '/');
+			navigate(state?.destination || '/');
 		} catch (error) {
-			setFeedbackState('error');
-			setFeedbackVisibility(true);
-			setFeedbackMessage((error as ErrorResponse).data?.message);
+			showFailureMessage((error as ErrorResponse).data?.message);
 		}
 	};
 
@@ -69,7 +65,7 @@ export const SignInPage = memo(() => {
 			<Container
 				maxWidth='xs'
 				component='main'
-				data-testid={TEST_ID_MAP.signInPage}>
+				data-testid={PAGES_TEST_ID_MAP.signInPage}>
 				<CssBaseline />
 				<Box
 					sx={{
@@ -89,15 +85,21 @@ export const SignInPage = memo(() => {
 						<EmailController
 							control={control}
 							error={!!errors.email}
-							testId={TEST_ID_MAP.emailTextField}
-							label={!!errors.email ? TEXT_MAP.emailError : TEXT_MAP.email}
+							testId={PAGES_TEST_ID_MAP.emailTextField}
+							label={
+								!!errors.email
+									? SIGN_IN_PAGE_TEXT_MAP.emailError
+									: SIGN_IN_PAGE_TEXT_MAP.email
+							}
 						/>
 						<PasswordController
 							control={control}
 							error={!!errors.password}
-							testId={TEST_ID_MAP.passwordTextField}
+							testId={PAGES_TEST_ID_MAP.passwordTextField}
 							label={
-								!!errors.email ? TEXT_MAP.passwordError : TEXT_MAP.password
+								!!errors.email
+									? SIGN_IN_PAGE_TEXT_MAP.passwordError
+									: SIGN_IN_PAGE_TEXT_MAP.password
 							}
 						/>
 						<Button
@@ -106,11 +108,11 @@ export const SignInPage = memo(() => {
 							variant='contained'
 							sx={{ mt: 3, mb: 2 }}
 							disabled={isSubmitting}
-							data-testid={TEST_ID_MAP.submitButton}>
-							{TEXT_MAP.signIn}
+							data-testid={PAGES_TEST_ID_MAP.submitButton}>
+							{SIGN_IN_PAGE_TEXT_MAP.signIn}
 						</Button>
-						<NavLink to='/signUp' data-testid={TEST_ID_MAP.navToSingUp}>
-							{TEXT_MAP.signUpPageLink}
+						<NavLink to='/signUp' data-testid={PAGES_TEST_ID_MAP.navToSingUp}>
+							{SIGN_IN_PAGE_TEXT_MAP.signUpPageLink}
 						</NavLink>
 					</Box>
 				</Box>

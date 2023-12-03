@@ -5,7 +5,7 @@ export {
 	useAppSelector,
 } from './appStore';
 
-export { setUserData, fetchUserInfo, updateUserInfo } from './userStore';
+export { setUserData } from './userStore';
 
 export {
 	addProductToBasket,

@@ -1,19 +1,23 @@
-import { useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 
 import { getIsLiked } from '../utils';
 import { useChangeLikeStatusMutation } from '../../api';
+import { PageContext } from '../providers';
 
 type ClickFavoriteHandlerType = {
 	likes?: string[];
 	productId?: string;
+	pageNumber?: number;
 	currentUserId?: string;
 };
 
 export const useClickFavoriteHandler = ({
 	likes,
 	productId,
+	pageNumber = 0,
 	currentUserId,
 }: ClickFavoriteHandlerType): (() => void) => {
+	const { searchByValue } = useContext(PageContext);
 	const like = useMemo(
 		() => getIsLiked(likes, currentUserId),
 		[currentUserId, likes]
@@ -27,5 +31,12 @@ export const useClickFavoriteHandler = ({
 		};
 	}
 
-	return () => changeLikeStatusFn({ productId, like });
+	return () =>
+		changeLikeStatusFn({
+			productId,
+			like,
+			currentUserId,
+			pageNumber,
+			searchByValue,
+		});
 };

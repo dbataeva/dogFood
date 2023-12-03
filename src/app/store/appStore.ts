@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import type { TypedUseSelectorHook } from 'react-redux';
 
-import { api, authApi, productsApi } from '../../api';
+import { api, authApi, productsApi, userApi } from '../../api';
 import { userSliceName, userReducer } from './userStore';
 import { basketReducer, basketSliceName } from './basketStore';
 
@@ -17,6 +17,7 @@ export const store = configureStore({
 		user: userReducer,
 		basket: basketReducer,
 		[authApi.reducerPath]: authApi.reducer,
+		[userApi.reducerPath]: userApi.reducer,
 		[productsApi.reducerPath]: productsApi.reducer,
 	},
 	middleware: (getDefaultMiddleware) =>
@@ -24,7 +25,7 @@ export const store = configureStore({
 			thunk: {
 				extraArgument: api,
 			},
-		}).concat(authApi.middleware, productsApi.middleware),
+		}).concat(authApi.middleware, productsApi.middleware, userApi.middleware),
 	devTools: true,
 });
 

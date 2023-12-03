@@ -2,13 +2,13 @@ import { FC, memo, useContext } from 'react';
 import { Typography } from '@mui/material';
 import { Masonry } from '@mui/lab';
 
-import { Sort, MiniCardSpinner, ErrorComponent } from '../../atoms';
+import { MiniCardSpinner, ErrorComponent } from '../../atoms';
 import { ProductCardListWithQuery } from '../../organisms';
 import { Styled } from './HomePage.styles';
 import { PageContext } from '../../../providers';
 import { useProductsList } from '../../../hooks';
 import { withAccessProtection } from '../../../HOCs';
-import { TEST_ID_MAP } from '../constants';
+import { PAGES_TEST_ID_MAP } from '../constants';
 
 const HomePage: FC = memo(() => {
 	const { searchByValue } = useContext(PageContext);
@@ -24,8 +24,8 @@ const HomePage: FC = memo(() => {
 					</Typography>
 				</Styled.Paper>
 			)}
-			<Styled.Container data-testid={TEST_ID_MAP.homePage}>
-				<Sort />
+			<Styled.Container data-testid={PAGES_TEST_ID_MAP.homePage}>
+				{/* <Sort /> */}
 				<ProductCardListWithQuery
 					error={error}
 					isError={isError}
@@ -34,7 +34,7 @@ const HomePage: FC = memo(() => {
 					isLastPage={isLastPage}
 					onScrollEnd={onScrollEnd}
 					cardsArr={data?.products || []}
-					testId={TEST_ID_MAP.productMiniCard}
+					testId={PAGES_TEST_ID_MAP.productMiniCard}
 					renderError={(errorMessage: string, refetch?: VoidFunction) => (
 						<ErrorComponent refetch={refetch} errorMessage={errorMessage} />
 					)}

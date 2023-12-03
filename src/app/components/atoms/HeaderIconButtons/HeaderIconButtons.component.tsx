@@ -8,7 +8,7 @@ import {
 } from '@mui/icons-material';
 
 import { Box, IconButton } from '@mui/material';
-import { MENU_ID, TEST_ID_MAP } from './constants';
+import { MENU_ID, HEADER_ICON_BUTTONS_TEST_ID_MAP } from './constants';
 import { ReactComponent as ProfileImg } from '../../../images/profile.svg';
 import { useGetFavoriteProducts, useGetProductsInBasket } from '../../../hooks';
 import { TestIdType } from '../../../../types/testId';
@@ -43,7 +43,7 @@ export const HeaderIconButtons: FC<HeaderIconButtonsProps> = memo(
 						color={'inherit'}
 						aria-label={'favorites'}
 						onClick={favoriteIconClickHandler}
-						data-testid={TEST_ID_MAP.favorite}>
+						data-testid={HEADER_ICON_BUTTONS_TEST_ID_MAP.favorite}>
 						<Badge badgeContent={numberOfFavoriteProducts} color={'error'}>
 							<FavoriteBorder />
 						</Badge>
@@ -53,7 +53,7 @@ export const HeaderIconButtons: FC<HeaderIconButtonsProps> = memo(
 						color={'inherit'}
 						onClick={basketIconClickHandler}
 						aria-label={'basket'}
-						data-testid={TEST_ID_MAP.basket}>
+						data-testid={HEADER_ICON_BUTTONS_TEST_ID_MAP.basket}>
 						<Badge badgeContent={numberOfProductsInBasket} color={'error'}>
 							<ShoppingBasketOutlined />
 						</Badge>
@@ -65,7 +65,7 @@ export const HeaderIconButtons: FC<HeaderIconButtonsProps> = memo(
 						aria-controls={MENU_ID}
 						aria-haspopup={'true'}
 						color={'inherit'}
-						data-testid={TEST_ID_MAP.profile}
+						data-testid={HEADER_ICON_BUTTONS_TEST_ID_MAP.profile}
 						onClick={profileIconClickHandler}>
 						<ProfileImg style={{ color: 'white' }} />
 					</IconButton>
@@ -73,7 +73,7 @@ export const HeaderIconButtons: FC<HeaderIconButtonsProps> = memo(
 						size={'large'}
 						color={'inherit'}
 						onClick={exitIconClickHandler}
-						data-testid={TEST_ID_MAP.quit}
+						data-testid={HEADER_ICON_BUTTONS_TEST_ID_MAP.quit}
 						aria-label={'quit'}>
 						<ExitToApp />
 					</IconButton>

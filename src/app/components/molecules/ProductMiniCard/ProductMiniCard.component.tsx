@@ -16,6 +16,7 @@ type ProductMiniCardProps = Product &
 		navTo?: string;
 		cutHeader?: boolean;
 		cardWidth?: number;
+		pageNumber?: number;
 	};
 
 export const ProductMiniCard: FC<ProductMiniCardProps> = memo(
@@ -31,6 +32,7 @@ export const ProductMiniCard: FC<ProductMiniCardProps> = memo(
 		pictures,
 		cutHeader,
 		cardWidth,
+		pageNumber,
 	}) => {
 		const priceWithDiscount = useMemo(
 			() => getPriceWithDiscount(price, discount),
@@ -68,6 +70,7 @@ export const ProductMiniCard: FC<ProductMiniCardProps> = memo(
 						_id={_id}
 						likes={likes}
 						stock={stock}
+						pageNumber={pageNumber}
 						priceWithDiscount={priceWithDiscount}
 					/>
 				</Card>

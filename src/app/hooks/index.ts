@@ -1,3 +1,4 @@
+export { useFeedback } from './useFeedback';
 export { useDebounce } from './useDebounce';
 export { useManageBasket } from './useManageBasket';
 export { useProductsList } from './useProductsList';

@@ -6,7 +6,7 @@ import { ProductCardInBasket } from '../../organisms';
 import { withAccessProtection } from '../../../HOCs';
 import { TEXT_MAP } from './textMap';
 import { BasketSummary } from '../../atoms';
-import { TEST_ID_MAP } from '../constants';
+import { PAGES_TEST_ID_MAP } from '../constants';
 
 export const ShoppingBasketPage: FC = memo(() => {
 	const { commonSum, productsInBasket, numberOfProductsInBasket } =
@@ -14,7 +14,7 @@ export const ShoppingBasketPage: FC = memo(() => {
 
 	return (
 		<Box
-			data-testid={TEST_ID_MAP.basketPage}
+			data-testid={PAGES_TEST_ID_MAP.basketPage}
 			sx={{
 				maxWidth: '992px',
 				marginInline: 'auto',
@@ -31,7 +31,7 @@ export const ShoppingBasketPage: FC = memo(() => {
 			) : (
 				<div>{TEXT_MAP.noProducts}</div>
 			)}
-			{numberOfProductsInBasket && (
+			{!!numberOfProductsInBasket && (
 				<BasketSummary
 					commonSum={commonSum}
 					numberOfProductsInBasket={numberOfProductsInBasket}

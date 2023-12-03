@@ -4,6 +4,7 @@ import {
 	AddNewProductRequest,
 	AddReviewRequest,
 	ChangeLikeProductStatus,
+	DeleteProductRequest,
 	DeleteReviewRequest,
 	PaginatedProductsRequest,
 	Products,
@@ -61,8 +62,8 @@ export const productsApi = createApi({
 			serializeQueryArgs: ({ endpointName, queryArgs: { query } }) => {
 				return endpointName + query;
 			},
-			merge: (currentCache, newItems, { arg }) => {
-				arg.page > 1 && currentCache?.products.push(...newItems.products);
+			merge: (currentCache, newItems, { arg: { page } }) => {
+				page > 1 && currentCache?.products.push(...newItems.products);
 			},
 			forceRefetch({ currentArg, previousArg }) {
 				return currentArg !== previousArg;
@@ -70,14 +71,73 @@ export const productsApi = createApi({
 		}),
 
 		changeLikeStatus: builder.mutation<Product, ChangeLikeProductStatus>({
-			query: ({ productId, like }) => ({
-				url: `products/likes/${productId}`,
-				method: like ? 'DELETE' : 'PUT',
+			query: (args) => ({
+				url: `products/likes/${args.productId}`,
+				method: args.like ? 'DELETE' : 'PUT',
 			}),
-			invalidatesTags: (result) => [
-				{ type: 'Products', id: result?._id },
-				{ type: 'Products', id: 'PARTIAL-LIST' },
-			],
+
+			async onQueryStarted(
+				{ productId, like, pageNumber, searchByValue, currentUserId },
+				{ dispatch, queryFulfilled }
+			) {
+				const getPaginatedProductsPatchResult = dispatch(
+					productsApi.util.updateQueryData(
+						'getPaginatedProducts',
+						{ page: pageNumber!, query: searchByValue },
+						(cachedProducts) => {
+							cachedProducts.products.forEach((product) => {
+								if (product._id === productId) {
+									like
+										? (product.likes = product.likes.filter(
+												(like) => like !== currentUserId
+										  ))
+										: product.likes.push(currentUserId!);
+								}
+							});
+						}
+					)
+				);
+
+				const getProductsPatchResult = dispatch(
+					productsApi.util.updateQueryData(
+						'getProducts',
+						undefined,
+						(cachedProducts) => {
+							cachedProducts.products.forEach((product) => {
+								if (product._id === productId) {
+									like
+										? (product.likes = product.likes.filter(
+												(like) => like !== currentUserId
+										  ))
+										: product.likes.push(currentUserId!);
+								}
+							});
+						}
+					)
+				);
+
+				const getProductByIdPatchResult = dispatch(
+					productsApi.util.updateQueryData(
+						'getProductById',
+						productId,
+						(cachedProduct) => {
+							like
+								? (cachedProduct.likes = cachedProduct.likes.filter(
+										(like) => like !== currentUserId
+								  ))
+								: cachedProduct.likes.push(currentUserId!);
+						}
+					)
+				);
+
+				try {
+					await queryFulfilled;
+				} catch {
+					getPaginatedProductsPatchResult.undo();
+					getProductsPatchResult.undo();
+					getProductByIdPatchResult.undo();
+				}
+			},
 		}),
 
 		getProductById: builder.query<Product, string | undefined>({
@@ -87,15 +147,48 @@ export const productsApi = createApi({
 			providesTags: (result) => [{ type: 'Products', id: result?._id }],
 		}),
 
-		deleteProduct: builder.mutation<Product, string>({
-			query: (productId) => ({
-				url: `products/${productId}`,
+		deleteProduct: builder.mutation<Product, DeleteProductRequest>({
+			query: (args) => ({
+				url: `products/${args.productId}`,
 				method: 'DELETE',
 			}),
-			invalidatesTags: (result) => [
-				{ type: 'Products', id: result?._id },
-				{ type: 'Products', id: 'PARTIAL-LIST' },
-			],
+
+			invalidatesTags: (result) => [{ type: 'Products', id: result?._id }],
+
+			async onQueryStarted(
+				{ productId, pageNumber, searchByValue },
+				{ dispatch, queryFulfilled }
+			) {
+				try {
+					await queryFulfilled;
+
+					dispatch(
+						productsApi.util.updateQueryData(
+							'getPaginatedProducts',
+							{ page: pageNumber!, query: searchByValue },
+							(cachedProducts) => {
+								cachedProducts.total -= 1;
+								cachedProducts.products = cachedProducts.products.filter(
+									(product) => product._id !== productId
+								);
+							}
+						)
+					);
+
+					dispatch(
+						productsApi.util.updateQueryData(
+							'getProducts',
+							undefined,
+							(cachedProducts) => {
+								cachedProducts.total -= 1;
+								cachedProducts.products = cachedProducts.products.filter(
+									(product) => product._id !== productId
+								);
+							}
+						)
+					);
+				} catch {}
+			},
 		}),
 
 		addReview: builder.mutation<Product, AddReviewRequest>({

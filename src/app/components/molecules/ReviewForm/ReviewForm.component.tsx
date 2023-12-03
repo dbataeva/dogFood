@@ -1,5 +1,5 @@
 import { Box, Button, TextField } from '@mui/material';
-import { FC, memo, useState } from 'react';
+import { FC, memo } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 
@@ -10,7 +10,8 @@ import {
 	ErrorResponse,
 } from '../../../../api';
 import { reviewScheme, TEST_ID_MAP, TEXT_MAP } from './constants';
-import { Feedback, FeedbackProps } from '../../atoms';
+import { Feedback } from '../../atoms';
+import { useFeedback } from '../../../hooks';
 
 export const ReviewForm: FC<{ productId: Product['_id'] }> = memo(
 	({ productId }) => {
@@ -26,10 +27,14 @@ export const ReviewForm: FC<{ productId: Product['_id'] }> = memo(
 			resolver: yupResolver(reviewScheme),
 		});
 
-		const [feedbackVisibility, setFeedbackVisibility] = useState(false);
-		const [feedbackMessage, setFeedbackMessage] = useState('');
-		const [feedbackState, setFeedbackState] =
-			useState<FeedbackProps['state']>('success');
+		const {
+			feedbackVisibility,
+			setFeedbackVisibility,
+			feedbackMessage,
+			feedbackState,
+			showSuccessfulFeedback,
+			showFailureMessage,
+		} = useFeedback();
 
 		const [addReviewFn] = useAddReviewMutation();
 
@@ -39,12 +44,9 @@ export const ReviewForm: FC<{ productId: Product['_id'] }> = memo(
 					productId,
 					review: data,
 				}).unwrap();
-				setFeedbackVisibility(true);
-				setFeedbackMessage(TEXT_MAP.successAddReview);
+				showSuccessfulFeedback(TEXT_MAP.successAddReview);
 			} catch (error) {
-				setFeedbackState('error');
-				setFeedbackVisibility(true);
-				setFeedbackMessage((error as ErrorResponse).data.message);
+				showFailureMessage((error as ErrorResponse).data.message);
 			}
 		};
 

@@ -26,8 +26,6 @@
 // POST https://api.react-learning.ru/forgot-password // сброс пароля на почту
 // PATCH https://api.react-learning.ru/password-reset/:token // смена пароля после подтвержения токеном
 
-import { User } from '../types';
-
 export const BASE_URL = 'https://api.react-learning.ru';
 export const LOCAL_STORAGE_TOKEN_KEY = 'token';
 
@@ -48,34 +46,6 @@ class Api {
 	constructor({ baseUrl, headers }: TConfigApi) {
 		this.baseUrl = baseUrl;
 		this.headers = headers;
-	}
-
-	private onResponse(res: Response) {
-		return res.ok ? res.json() : res.json().then((err) => Promise.reject(err));
-	}
-
-	private getApiUrl(path: string) {
-		return `${this.baseUrl}${path}`;
-	}
-
-	getUserInfo() {
-		return fetch(this.getApiUrl('/users/me'), {
-			headers: {
-				...this.headers,
-				authorization: `Bearer ${getConfig().apiToken}`,
-			},
-		}).then(this.onResponse);
-	}
-
-	updateUserInfo(data: Pick<User, 'name' | 'about'>) {
-		return fetch(this.getApiUrl('/users/me'), {
-			method: 'PATCH',
-			headers: {
-				...this.headers,
-				authorization: `Bearer ${getConfig().apiToken}`,
-			},
-			body: JSON.stringify(data),
-		}).then(this.onResponse);
 	}
 }
 

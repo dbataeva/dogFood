@@ -10,6 +10,9 @@ export type Products = {
 export type ChangeLikeProductStatus = {
 	productId: Product['_id'];
 	like: boolean;
+	pageNumber?: number;
+	searchByValue: string;
+	currentUserId?: string;
 };
 
 export type AddNewProductRequest = Pick<
@@ -45,4 +48,10 @@ export type ReviewFormType = {
 export type DeleteReviewRequest = {
 	productId: Product['_id'];
 	reviewId: Review['_id'];
+};
+
+export type DeleteProductRequest = {
+	productId: Product['_id'];
+	pageNumber?: number;
+	searchByValue: string;
 };

@@ -5,7 +5,7 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 
 import { Logo, MobileMenu, Search, HeaderIconButtons } from '../../atoms';
-import { MOBILE_MENU_ID, TEST_ID_MAP } from './constants';
+import { MOBILE_MENU_ID, HEADER_TEST_ID_MAP } from './constants';
 import { useIconButtons, useSearch } from './hooks';
 
 export const Header: FC = memo(() => {
@@ -30,7 +30,7 @@ export const Header: FC = memo(() => {
 
 	return (
 		<Box
-			data-testid={TEST_ID_MAP.header}
+			data-testid={HEADER_TEST_ID_MAP.header}
 			sx={{ flexGrow: 1, marginBottom: '20px' }}>
 			<AppBar position={'static'}>
 				<Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -40,12 +40,12 @@ export const Header: FC = memo(() => {
 						color={'inherit'}
 						aria-label={'open drawer'}
 						sx={{ mr: 2 }}>
-						<Logo testId={TEST_ID_MAP.logo} />
+						<Logo testId={HEADER_TEST_ID_MAP.logo} />
 					</IconButton>
-					{showSearch && <Search testId={TEST_ID_MAP.searchBar} />}
+					{showSearch && <Search testId={HEADER_TEST_ID_MAP.searchBar} />}
 					{showIconButtons && (
 						<HeaderIconButtons
-							testId={TEST_ID_MAP.navIcons}
+							testId={HEADER_TEST_ID_MAP.navIcons}
 							mobileMenuId={MOBILE_MENU_ID}
 							exitIconClickHandler={exitIconClickHandler}
 							handleMobileMenuOpen={handleMobileMenuOpen}

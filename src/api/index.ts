@@ -20,3 +20,8 @@ export {
 	useChangeLikeStatusMutation,
 	useGetPaginatedProductsQuery,
 } from './productsApi';
+export {
+	userApi,
+	useGetUserInfoQuery,
+	useUpdateUserInfoMutation,
+} from './userApi';

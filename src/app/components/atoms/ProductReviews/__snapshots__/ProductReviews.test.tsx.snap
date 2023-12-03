@@ -1,0 +1,91 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Отзывы о продукте должен соответствовать snapshot'у 1`] = `
+<ul
+  className="MuiList-root MuiList-padding css-gcof6a-MuiList-root"
+  data-testid="reviewsList"
+>
+  <li
+    className="MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-alignItemsFlexStart css-hhvo2v-MuiListItem-root"
+    data-testid="review"
+    disabled={false}
+  >
+    <div
+      className="MuiListItemAvatar-root MuiListItemAvatar-alignItemsFlexStart css-1m6607n-MuiListItemAvatar-root"
+    >
+      <div
+        className="MuiAvatar-root MuiAvatar-circular css-1wlk0hk-MuiAvatar-root"
+      >
+        <img
+          alt="Remy Sharp"
+          className="MuiAvatar-img css-1pqm26d-MuiAvatar-img"
+          src="https://images.unsplash.com/photo-1552944150-6dd1180e5999?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=725&q=80"
+        />
+      </div>
+    </div>
+    <div
+      className="MuiListItemText-root MuiListItemText-multiline css-konndc-MuiListItemText-root"
+    >
+      <span
+        className="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-10hburv-MuiTypography-root"
+      >
+        Александра Филимонова
+      </span>
+      <p
+        className="MuiTypography-root MuiTypography-body2 MuiListItemText-secondary css-83ijpv-MuiTypography-root"
+      >
+        <span
+          className="MuiTypography-root MuiTypography-body2 css-1phucj-MuiTypography-root"
+        >
+          Не понравилось
+        </span>
+      </p>
+    </div>
+  </li>
+  <li
+    className="MuiDivider-root MuiDivider-inset css-uls1yk-MuiDivider-root"
+    role="separator"
+  />
+  <li
+    className="MuiListItem-root MuiListItem-gutters MuiListItem-padding MuiListItem-alignItemsFlexStart css-hhvo2v-MuiListItem-root"
+    data-testid="review"
+    disabled={false}
+  >
+    <div
+      className="MuiListItemAvatar-root MuiListItemAvatar-alignItemsFlexStart css-1m6607n-MuiListItemAvatar-root"
+    >
+      <div
+        className="MuiAvatar-root MuiAvatar-circular css-1wlk0hk-MuiAvatar-root"
+      >
+        <img
+          alt="Remy Sharp"
+          className="MuiAvatar-img css-1pqm26d-MuiAvatar-img"
+          src="https://images.unsplash.com/photo-1552944150-6dd1180e5999?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=725&q=80"
+        />
+      </div>
+    </div>
+    <div
+      className="MuiListItemText-root MuiListItemText-multiline css-konndc-MuiListItemText-root"
+    >
+      <span
+        className="MuiTypography-root MuiTypography-body1 MuiListItemText-primary css-10hburv-MuiTypography-root"
+      >
+        Александра Филимонова
+      </span>
+      <p
+        className="MuiTypography-root MuiTypography-body2 MuiListItemText-secondary css-83ijpv-MuiTypography-root"
+      >
+        <span
+          className="MuiTypography-root MuiTypography-body2 css-1phucj-MuiTypography-root"
+        >
+          Не понравилось
+        </span>
+      </p>
+    </div>
+  </li>
+  <li
+    className="MuiDivider-root MuiDivider-inset css-uls1yk-MuiDivider-root"
+    role="separator"
+  />
+</ul>
+`;

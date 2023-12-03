@@ -7,7 +7,7 @@ import { ProductCardListWithQuery } from '../../organisms';
 import { useGetFavoriteProducts } from '../../../hooks';
 import { withAccessProtection } from '../../../HOCs';
 import { TEXT_MAP } from './testMap';
-import { TEST_ID_MAP } from '../constants';
+import { PAGES_TEST_ID_MAP } from '../constants';
 
 const FavoriteProductsPage: FC = memo(() => {
 	const {
@@ -21,7 +21,7 @@ const FavoriteProductsPage: FC = memo(() => {
 
 	return (
 		<Box
-			data-testid={TEST_ID_MAP.favoritePage}
+			data-testid={PAGES_TEST_ID_MAP.favoritePage}
 			sx={{ width: '992px', marginInline: 'auto' }}>
 			<ProductCardListWithQuery
 				error={error}
@@ -29,7 +29,7 @@ const FavoriteProductsPage: FC = memo(() => {
 				refetch={refetch}
 				isLoading={isLoading}
 				cardsArr={favoriteProducts}
-				testId={TEST_ID_MAP.productMiniCard}
+				testId={PAGES_TEST_ID_MAP.productMiniCard}
 				renderError={(errorMessage: string, refetch?: VoidFunction) => (
 					<ErrorComponent refetch={refetch} errorMessage={errorMessage} />
 				)}

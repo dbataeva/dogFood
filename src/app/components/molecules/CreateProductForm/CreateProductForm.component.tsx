@@ -1,18 +1,32 @@
 import CardActions from '@mui/material/CardActions';
-import { FC, memo, useState } from 'react';
+import { FC, memo } from 'react';
 import { Box, Button, TextField } from '@mui/material';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { TEST_ID_MAP, TEXT_MAP, createProductScheme } from './constants';
+import {
+	TEXT_MAP,
+	createProductScheme,
+	CREATE_PRODUCT_FORM_TEST_ID_MAP,
+} from './constants';
 import {
 	AddNewProductRequest,
 	ErrorResponse,
 	useAddProductMutation,
 } from '../../../../api';
-import { Feedback, FeedbackProps } from '../../atoms';
+import { Feedback } from '../../atoms';
+import { useFeedback } from '../../../hooks';
 
 export const CreateProductForm: FC = memo(() => {
+	const {
+		feedbackVisibility,
+		setFeedbackVisibility,
+		feedbackMessage,
+		feedbackState,
+		showSuccessfulFeedback,
+		showFailureMessage,
+	} = useFeedback();
+
 	const {
 		control,
 		handleSubmit,
@@ -20,29 +34,20 @@ export const CreateProductForm: FC = memo(() => {
 	} = useForm<AddNewProductRequest>({
 		defaultValues: {
 			name: '',
-			discount: 0,
 			pictures: '',
 			description: '',
 		},
 		resolver: yupResolver(createProductScheme),
 	});
 
-	const [feedbackVisibility, setFeedbackVisibility] = useState(false);
-	const [feedbackMessage, setFeedbackMessage] = useState('');
-	const [feedbackState, setFeedbackState] =
-		useState<FeedbackProps['state']>('success');
-
 	const [addProductFn] = useAddProductMutation();
 
 	const submitHandler: SubmitHandler<AddNewProductRequest> = async (data) => {
 		try {
 			await addProductFn(data).unwrap();
-			setFeedbackVisibility(true);
-			setFeedbackMessage(TEXT_MAP.successfulAdding);
+			showSuccessfulFeedback(TEXT_MAP.successfulAdding);
 		} catch (error) {
-			setFeedbackState('error');
-			setFeedbackVisibility(true);
-			setFeedbackMessage((error as ErrorResponse).data.message);
+			showFailureMessage((error as ErrorResponse).data.message);
 		}
 	};
 
@@ -52,7 +57,7 @@ export const CreateProductForm: FC = memo(() => {
 				noValidate
 				component='form'
 				sx={{ width: 400 }}
-				data-testid={TEST_ID_MAP.form}
+				data-testid={CREATE_PRODUCT_FORM_TEST_ID_MAP.form}
 				onSubmit={handleSubmit(submitHandler)}>
 				<Controller
 					name='name'
@@ -63,7 +68,7 @@ export const CreateProductForm: FC = memo(() => {
 							fullWidth
 							margin='normal'
 							error={!!errors.name}
-							data-testid={TEST_ID_MAP.nameField}
+							data-testid={CREATE_PRODUCT_FORM_TEST_ID_MAP.nameField}
 							label={!!errors.name ? TEXT_MAP.nameError : TEXT_MAP.name}
 							{...field}
 						/>
@@ -78,7 +83,7 @@ export const CreateProductForm: FC = memo(() => {
 							fullWidth
 							margin='normal'
 							error={!!errors.price}
-							data-testid={TEST_ID_MAP.priceField}
+							data-testid={CREATE_PRODUCT_FORM_TEST_ID_MAP.priceField}
 							label={!!errors.price ? TEXT_MAP.priceError : TEXT_MAP.price}
 							{...field}
 						/>
@@ -93,7 +98,7 @@ export const CreateProductForm: FC = memo(() => {
 							fullWidth
 							margin='normal'
 							error={!!errors.discount}
-							data-testid={TEST_ID_MAP.discountField}
+							data-testid={CREATE_PRODUCT_FORM_TEST_ID_MAP.discountField}
 							label={
 								!!errors.discount ? TEXT_MAP.discountError : TEXT_MAP.discount
 							}
@@ -110,7 +115,7 @@ export const CreateProductForm: FC = memo(() => {
 							fullWidth
 							margin='normal'
 							error={!!errors.pictures}
-							data-testid={TEST_ID_MAP.picturesField}
+							data-testid={CREATE_PRODUCT_FORM_TEST_ID_MAP.picturesField}
 							label={
 								!!errors.pictures ? TEXT_MAP.picturesError : TEXT_MAP.pictures
 							}
@@ -127,7 +132,7 @@ export const CreateProductForm: FC = memo(() => {
 							fullWidth
 							margin='normal'
 							error={!!errors.stock}
-							data-testid={TEST_ID_MAP.stockField}
+							data-testid={CREATE_PRODUCT_FORM_TEST_ID_MAP.stockField}
 							label={!!errors.stock ? TEXT_MAP.stockError : TEXT_MAP.stock}
 							{...field}
 						/>
@@ -142,7 +147,7 @@ export const CreateProductForm: FC = memo(() => {
 							fullWidth
 							margin='normal'
 							error={!!errors.description}
-							data-testid={TEST_ID_MAP.descriptionField}
+							data-testid={CREATE_PRODUCT_FORM_TEST_ID_MAP.descriptionField}
 							label={
 								!!errors.description
 									? TEXT_MAP.descriptionError
@@ -157,7 +162,7 @@ export const CreateProductForm: FC = memo(() => {
 						type='submit'
 						variant='text'
 						disabled={isSubmitting}
-						data-testid={TEST_ID_MAP.submitButton}>
+						data-testid={CREATE_PRODUCT_FORM_TEST_ID_MAP.submitButton}>
 						{TEXT_MAP.finish}
 					</Button>
 				</CardActions>

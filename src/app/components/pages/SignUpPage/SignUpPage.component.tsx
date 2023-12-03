@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Container from '@mui/material/Container';
-import { memo, useState } from 'react';
+import { memo } from 'react';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -17,13 +17,9 @@ import {
 	SignUpFormType,
 	useSignUpMutation,
 } from '../../../../api';
-import {
-	EmailController,
-	Feedback,
-	FeedbackProps,
-	PasswordController,
-} from '../../atoms';
-import { TEST_ID_MAP } from '../constants';
+import { EmailController, Feedback, PasswordController } from '../../atoms';
+import { PAGES_TEST_ID_MAP } from '../constants';
+import { useFeedback } from '../../../hooks';
 
 export const SignUpPage = memo(() => {
 	const {
@@ -39,23 +35,24 @@ export const SignUpPage = memo(() => {
 		resolver: yupResolver(signUpSchema),
 	});
 
-	const [feedbackVisibility, setFeedbackVisibility] = useState(false);
-	const [feedbackMessage, setFeedbackMessage] = useState('');
-	const [feedbackState, setFeedbackState] =
-		useState<FeedbackProps['state']>('success');
+	const {
+		feedbackVisibility,
+		setFeedbackVisibility,
+		feedbackMessage,
+		feedbackState,
+		showSuccessfulFeedback,
+		showFailureMessage,
+	} = useFeedback();
 
 	const [signUpFn] = useSignUpMutation();
 	const navigate = useNavigate();
 	const submitHandler: SubmitHandler<SignUpFormType> = async (data) => {
 		try {
 			await signUpFn(data).unwrap();
-			setFeedbackVisibility(true);
-			setFeedbackMessage(TEXT_MAP.successSignUp);
+			showSuccessfulFeedback(TEXT_MAP.successSignUp);
 			navigate('/signIn');
 		} catch (error) {
-			setFeedbackState('error');
-			setFeedbackVisibility(true);
-			setFeedbackMessage((error as ErrorResponse).data.message);
+			showFailureMessage((error as ErrorResponse).data.message);
 		}
 	};
 
@@ -64,7 +61,7 @@ export const SignUpPage = memo(() => {
 			<Container
 				maxWidth='xs'
 				component='main'
-				data-testid={TEST_ID_MAP.signUpPage}>
+				data-testid={PAGES_TEST_ID_MAP.signUpPage}>
 				<CssBaseline />
 				<Box
 					sx={{
@@ -90,7 +87,7 @@ export const SignUpPage = memo(() => {
 									required
 									fullWidth
 									id='group'
-									data-testid={TEST_ID_MAP.groupTextField}
+									data-testid={PAGES_TEST_ID_MAP.groupTextField}
 									label={!!errors.group ? TEXT_MAP.required : TEXT_MAP.group}
 									error={!!errors.group}
 									{...field}
@@ -100,13 +97,13 @@ export const SignUpPage = memo(() => {
 						<EmailController
 							control={control}
 							error={!!errors.email}
-							testId={TEST_ID_MAP.emailTextField}
+							testId={PAGES_TEST_ID_MAP.emailTextField}
 							label={!!errors.email ? TEXT_MAP.emailError : TEXT_MAP.email}
 						/>
 						<PasswordController
 							control={control}
 							error={!!errors.password}
-							testId={TEST_ID_MAP.passwordTextField}
+							testId={PAGES_TEST_ID_MAP.passwordTextField}
 							label={
 								!!errors.email ? TEXT_MAP.passwordError : TEXT_MAP.password
 							}
@@ -117,10 +114,10 @@ export const SignUpPage = memo(() => {
 							variant='contained'
 							sx={{ mt: 3, mb: 2 }}
 							disabled={isSubmitting}
-							data-testid={TEST_ID_MAP.submitButton}>
+							data-testid={PAGES_TEST_ID_MAP.submitButton}>
 							{TEXT_MAP.signUp}
 						</Button>
-						<NavLink to='/signIn' data-testid={TEST_ID_MAP.navToSingIn}>
+						<NavLink to='/signIn' data-testid={PAGES_TEST_ID_MAP.navToSingIn}>
 							{TEXT_MAP.signInPageLink}
 						</NavLink>
 					</Box>

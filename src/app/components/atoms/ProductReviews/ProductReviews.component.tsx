@@ -10,12 +10,12 @@ import { DeleteForever } from '@mui/icons-material';
 
 import { Product } from '../../../../types';
 import {
-	fetchUserInfo,
 	selectUser,
+	setUserData,
 	useAppDispatch,
 	useAppSelector,
 } from '../../../store';
-import { useDeleteReviewMutation } from '../../../../api';
+import { useDeleteReviewMutation, useGetUserInfoQuery } from '../../../../api';
 import { TEST_ID_MAP } from './testIdMap';
 
 type ProductReviewsProps = {
@@ -27,6 +27,9 @@ export const ProductReviews: FC<ProductReviewsProps> = memo(
 	({ productId, reviews }) => {
 		const dispatch = useAppDispatch();
 		const { currentUser } = useAppSelector(selectUser);
+		const { data, isSuccess } = useGetUserInfoQuery(undefined, {
+			skip: !!currentUser,
+		});
 		const [deleteReviewFn] = useDeleteReviewMutation();
 
 		const clickDeleteReviewHandler = useCallback(
@@ -37,8 +40,8 @@ export const ProductReviews: FC<ProductReviewsProps> = memo(
 		);
 
 		useEffect(() => {
-			!currentUser && dispatch(fetchUserInfo());
-		}, []);
+			isSuccess && dispatch(setUserData(data));
+		}, [data, dispatch, isSuccess]);
 
 		return (
 			<List
